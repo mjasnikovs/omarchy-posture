@@ -30,7 +30,8 @@ The plugin needs the helper, a small Rust program that reads the camera and
 runs the pose model.
 
 ```bash
-sudo pacman -U https://github.com/mjasnikovs/omarchy-posture/releases/download/v0.1.0/omarchy-posture-helper-0.1.0-1-x86_64.pkg.tar.zst
+curl -LO https://github.com/mjasnikovs/omarchy-posture/releases/download/v0.1.0/omarchy-posture-helper-0.1.0-1-x86_64.pkg.tar.zst
+sudo pacman -U omarchy-posture-helper-0.1.0-1-x86_64.pkg.tar.zst
 omarchy plugin add https://github.com/mjasnikovs/omarchy-posture.git --enable
 omarchy restart shell
 ```
