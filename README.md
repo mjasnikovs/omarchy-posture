@@ -4,6 +4,8 @@ A posture monitor for [Omarchy](https://omarchy.org). It watches you through
 the webcam and compares you to your own good posture, "the slate". Drift too
 far for too long and a small card shows what changed.
 
+![Posture card on the desktop](preview.png)
+
 ## Features
 
 - **Your posture, not a textbook's.** A front webcam cannot measure clinical
@@ -100,6 +102,18 @@ The service is kept loaded, so new code needs the restart.
 omarchy plugin remove mjasnikovs.posture
 rm -rf ~/.local/state/omarchy/posture
 ```
+
+## Requirements
+
+- Omarchy 4 (Quattro) with the Quickshell-based `omarchy-shell`.
+- A webcam at the top of your main screen.
+- `omarchy-posture-helper` from the AUR. It is a Rust program with the
+  RTMPose-t model (Apache-2.0). The package build downloads the model from
+  OpenMMLab and checks it against pinned sha256 sums.
+- No network access at run time. Four subprocesses, all plain argument lists:
+  the helper, `mkdir -p` for the state folder, `hyprctl -j clients` for the
+  fullscreen check, and `omarchy-shell lock isLocked`.
+- [bun](https://bun.sh) and cargo only for development.
 
 ## How it was chosen
 
