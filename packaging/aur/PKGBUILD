@@ -1,0 +1,50 @@
+# Maintainer: Edgars Mjasnikovs
+pkgname=omarchy-posture-helper
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Webcam pose sensor for the Omarchy Posture plugin (RTMPose-t on tract, CPU only)"
+arch=('x86_64' 'aarch64')
+url="https://github.com/mjasnikovs/omarchy-posture"
+license=('MIT' 'Apache-2.0')
+depends=('gcc-libs' 'glibc')
+makedepends=('cargo' 'clang')
+options=('!debug')
+_model=rtmpose-t_simcc-body7_pt-body7_420e-256x192-026a1439_20230504
+_onnx="20230831/rtmpose_onnx/$_model/end2end.onnx"
+_onnx_sha=a6c2f6a3896a4d51131d14d7a80a3d08b50f559af5a58a45d5b098aef510a70f
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz"
+        "$_model.zip::https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/onnx_sdk/$_model.zip")
+# The tarball sum is filled in by updpkgsums once the tag exists.
+sha256sums=('SKIP'
+            '937003a70832d9cc34ea16927f504792f3133e92dda1b9c626236bbbe9e805cb')
+
+prepare() {
+  # The zip sum pins the archive. This pins the one file installed from it.
+  echo "$_onnx_sha  $srcdir/$_onnx" | sha256sum -c
+  cd "omarchy-posture-$pkgver/helper"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "omarchy-posture-$pkgver/helper"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --frozen --release
+}
+
+check() {
+  cd "omarchy-posture-$pkgver/helper"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  # Not --release: with LTO that re-links tract and took twice as long.
+  cargo test --frozen
+}
+
+package() {
+  cd "omarchy-posture-$pkgver"
+  install -Dm755 helper/target/release/omarchy-posture-helper "$pkgdir/usr/bin/omarchy-posture-helper"
+  install -Dm644 "$srcdir/$_onnx" "$pkgdir/usr/share/omarchy-posture/rtmpose-t.onnx"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 THIRD_PARTY.md "$pkgdir/usr/share/licenses/$pkgname/THIRD_PARTY.md"
+}

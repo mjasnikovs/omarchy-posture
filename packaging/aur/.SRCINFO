@@ -1,0 +1,20 @@
+pkgbase = omarchy-posture-helper
+	pkgdesc = Webcam pose sensor for the Omarchy Posture plugin (RTMPose-t on tract, CPU only)
+	pkgver = 0.1.0
+	pkgrel = 1
+	url = https://github.com/mjasnikovs/omarchy-posture
+	arch = x86_64
+	arch = aarch64
+	license = MIT
+	license = Apache-2.0
+	makedepends = cargo
+	makedepends = clang
+	depends = gcc-libs
+	depends = glibc
+	options = !debug
+	source = omarchy-posture-helper-0.1.0.tar.gz::https://github.com/mjasnikovs/omarchy-posture/archive/refs/tags/v0.1.0.tar.gz
+	source = rtmpose-t_simcc-body7_pt-body7_420e-256x192-026a1439_20230504.zip::https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/onnx_sdk/rtmpose-t_simcc-body7_pt-body7_420e-256x192-026a1439_20230504.zip
+	sha256sums = SKIP
+	sha256sums = 937003a70832d9cc34ea16927f504792f3133e92dda1b9c626236bbbe9e805cb
+
+pkgname = omarchy-posture-helper

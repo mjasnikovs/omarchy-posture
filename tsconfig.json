@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        /* Language and Environment */
+        // ES2017: the QML JavaScript engine (QV4) does not lower newer syntax.
+        "target": "ES2017",
+        "lib": ["es2017"],
+        "moduleDetection": "force",
+
+        /* Modules */
+        // QML imports ECMAScript modules by the .mjs extension. tsc emits
+        // src/Model.mts as Model.mjs.
+        "module": "ES2022",
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "allowJs": true,
+
+        /* Emit */
+        "noEmit": true,
+
+        /* Interop Constraints */
+        "verbatimModuleSyntax": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+
+        /* Type Checking */
+        "strict": true,
+        "noImplicitAny": true,
+        "noUncheckedIndexedAccess": true,
+
+        /* Completeness */
+        "skipLibCheck": true,
+        "ignoreDeprecations": "6.0",
+        "types": ["bun"]
+    },
+    "include": ["src", "test"]
+}

@@ -1,0 +1,18 @@
+[package]
+name = "omarchy-posture-helper"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Webcam pose sensor for the Omarchy Posture plugin. Prints keypoints as JSON lines."
+rust-version = "1.89"
+
+[dependencies]
+v4l = "0.14.0"
+tract-onnx = "0.23.8"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "mjasnikovs.posture",
+  "name": "Posture",
+  "version": "0.1.0",
+  "author": "Edgars Mjasnikovs",
+  "license": "MIT",
+  "description": "Watches your sitting posture through the webcam and shows why it drifted from your own good-posture slate.",
+  "kinds": [
+    "service",
+    "bar-widget",
+    "overlay"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "BarWidget.qml",
+    "overlay": "Popup.qml"
+  },
+  "barWidget": {
+    "displayName": "Posture",
+    "description": "Webcam posture monitor",
+    "category": "Health",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "checkLeanIn": true,
+      "checkHeadDrop": true,
+      "checkHeadTilt": true,
+      "checkSideLean": true,
+      "strictness": 3,
+      "delaySeconds": 60,
+      "sideMode": "ignore"
+    },
+    "schema": [
+      {
+        "key": "checkLeanIn",
+        "type": "boolean",
+        "label": "Leaning in",
+        "description": "Alert when your head comes closer to the screen than your slate.",
+        "defaultValue": true
+      },
+      {
+        "key": "checkHeadDrop",
+        "type": "boolean",
+        "label": "Head drop",
+        "description": "Alert when your head sinks toward your shoulders (slouching).",
+        "defaultValue": true
+      },
+      {
+        "key": "checkHeadTilt",
+        "type": "boolean",
+        "label": "Head tilt",
+        "description": "Alert when your head tilts to one side.",
+        "defaultValue": true
+      },
+      {
+        "key": "checkSideLean",
+        "type": "boolean",
+        "label": "Side lean",
+        "description": "Alert when your shoulders tilt (leaning to one side).",
+        "defaultValue": true
+      },
+      {
+        "key": "strictness",
+        "type": "integer",
+        "label": "Strictness",
+        "description": "1 is lax, 5 is strict.",
+        "defaultValue": 3,
+        "min": 1,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "key": "delaySeconds",
+        "type": "integer",
+        "label": "Alert after (seconds)",
+        "description": "How long bad posture must last before the card shows.",
+        "defaultValue": 60,
+        "min": 10,
+        "max": 600,
+        "step": 10
+      },
+      {
+        "key": "sideMode",
+        "type": "enum",
+        "label": "Side monitors",
+        "description": "ignore: looking at a side screen is not judged. perMonitor: record a slate for each monitor.",
+        "options": ["ignore", "perMonitor"],
+        "defaultValue": "ignore"
+      }
+    ]
+  }
+}

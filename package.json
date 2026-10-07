@@ -1,0 +1,26 @@
+{
+    "name": "omarchy-posture",
+    "version": "0.1.0",
+    "description": "Omarchy plugin: watches your posture through the webcam and shows why it drifted.",
+    "author": "Edgars Mjasnikovs",
+    "license": "MIT",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "rm -f Model.mjs && tsc -p tsconfig.build.json",
+        "lint": "prettier --log-level warn --write 'src/**/*.mts' 'test/**/*.ts' && eslint --fix src test && tsc --noEmit",
+        "test": "bun test",
+        "check": "prettier --check 'src/**/*.mts' 'test/**/*.ts' && eslint src test && tsc --noEmit && bun test",
+        "release": "bun run check && bun run build && bash scripts/release-check.sh"
+    },
+    "devDependencies": {
+        "@eslint/js": "10.0.1",
+        "@types/bun": "1.4.2",
+        "@typescript-eslint/eslint-plugin": "8.60.0",
+        "@typescript-eslint/parser": "8.60.0",
+        "eslint": "10.4.0",
+        "eslint-config-prettier": "10.1.8",
+        "prettier": "3.8.3",
+        "typescript": "6.0.3"
+    }
+}
