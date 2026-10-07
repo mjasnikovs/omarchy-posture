@@ -154,20 +154,41 @@ Item {
               fontSize: Style.font.caption
             }
 
-            Repeater {
-              model: root.reasons
+            // Sized for every check failing at once, so the card keeps its
+            // size as reasons come and go. One line each, so none can wrap.
+            Item {
+              anchors.horizontalCenter: parent.horizontalCenter
+              width: Style.space(320)
+              height: Model.CHECKS.length * reasonMetrics.height
+                + (Model.CHECKS.length - 1) * reasonColumn.spacing
 
-              Text {
-                required property var modelData
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: Style.space(320)
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.WordWrap
-                textFormat: Text.PlainText
-                text: Model.reasonText(modelData)
-                color: root.foreground
+              FontMetrics {
+                id: reasonMetrics
                 font.family: root.fontFamily
                 font.pixelSize: Style.font.body
+              }
+
+              Column {
+                id: reasonColumn
+                width: parent.width
+                spacing: Style.space(14)
+
+                Repeater {
+                  model: root.reasons
+
+                  Text {
+                    required property var modelData
+                    width: reasonColumn.width
+                    height: reasonMetrics.height
+                    horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
+                    textFormat: Text.PlainText
+                    text: Model.reasonText(modelData)
+                    color: root.foreground
+                    font.family: root.fontFamily
+                    font.pixelSize: Style.font.body
+                  }
+                }
               }
             }
 
