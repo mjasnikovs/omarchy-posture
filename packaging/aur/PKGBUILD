@@ -14,8 +14,7 @@ _onnx="20230831/rtmpose_onnx/$_model/end2end.onnx"
 _onnx_sha=a6c2f6a3896a4d51131d14d7a80a3d08b50f559af5a58a45d5b098aef510a70f
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz"
         "$_model.zip::https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/onnx_sdk/$_model.zip")
-# The tarball sum is filled in by updpkgsums once the tag exists.
-sha256sums=('SKIP'
+sha256sums=('e9355368522a83ba96d3c64ea62d373b9b9d168d1214395be23500f34e306890'
             '937003a70832d9cc34ea16927f504792f3133e92dda1b9c626236bbbe9e805cb')
 
 prepare() {

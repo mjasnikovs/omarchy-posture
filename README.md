@@ -30,10 +30,13 @@ The plugin needs the helper, a small Rust program that reads the camera and
 runs the pose model.
 
 ```bash
-yay -S omarchy-posture-helper
+sudo pacman -U https://github.com/mjasnikovs/omarchy-posture/releases/download/v0.1.0/omarchy-posture-helper-0.1.0-1-x86_64.pkg.tar.zst
 omarchy plugin add https://github.com/mjasnikovs/omarchy-posture.git --enable
 omarchy restart shell
 ```
+
+The helper is not on the AUR yet. On aarch64, build it from source with
+`makepkg -si` in `packaging/aur`.
 
 > Plugins run unsandboxed inside your shell. Read the code before you enable it.
 
@@ -107,7 +110,7 @@ rm -rf ~/.local/state/omarchy/posture
 
 - Omarchy 4 (Quattro) with the Quickshell-based `omarchy-shell`.
 - A webcam at the top of your main screen.
-- `omarchy-posture-helper` from the AUR. It is a Rust program with the
+- `omarchy-posture-helper`. It is a Rust program with the
   RTMPose-t model (Apache-2.0). The package build downloads the model from
   OpenMMLab and checks it against pinned sha256 sums.
 - No network access at run time. Four subprocesses, all plain argument lists:

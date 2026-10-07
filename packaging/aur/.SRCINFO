@@ -14,7 +14,7 @@ pkgbase = omarchy-posture-helper
 	options = !debug
 	source = omarchy-posture-helper-0.1.0.tar.gz::https://github.com/mjasnikovs/omarchy-posture/archive/refs/tags/v0.1.0.tar.gz
 	source = rtmpose-t_simcc-body7_pt-body7_420e-256x192-026a1439_20230504.zip::https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/onnx_sdk/rtmpose-t_simcc-body7_pt-body7_420e-256x192-026a1439_20230504.zip
-	sha256sums = SKIP
+	sha256sums = e9355368522a83ba96d3c64ea62d373b9b9d168d1214395be23500f34e306890
 	sha256sums = 937003a70832d9cc34ea16927f504792f3133e92dda1b9c626236bbbe9e805cb
 
 pkgname = omarchy-posture-helper
