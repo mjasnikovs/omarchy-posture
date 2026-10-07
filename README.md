@@ -15,8 +15,8 @@ far for too long and a small card shows what changed.
 - **Says why.** The card shows a scope view of your slate and your posture now,
   plus one line per failed check, e.g. "Leaning in: 31% closer than your slate".
 - **Quiet.** The card waits out a delay you choose (10 s to 10 min). It closes
-  on its own when you sit back. It never takes keyboard focus, and it holds
-  back while a window is fullscreen.
+  on its own when you sit back. It takes no keys until you click it. It
+  shows over fullscreen games too.
 - **Side monitors.** Looking at a side screen is ignored by default. Or record
   one slate per monitor.
 - **Private.** Frames stay in memory in the helper. Only keypoints reach the
@@ -114,9 +114,8 @@ rm -rf ~/.local/state/omarchy/posture
 - `omarchy-posture-helper`. It is a Rust program with the
   RTMPose-t model (Apache-2.0). The package build downloads the model from
   OpenMMLab and checks it against pinned sha256 sums.
-- No network access at run time. Four subprocesses, all plain argument lists:
-  the helper, `mkdir -p` for the state folder, `hyprctl -j clients` for the
-  fullscreen check, and `omarchy-shell lock isLocked`.
+- No network access at run time. Three subprocesses, all plain argument lists:
+  the helper, `mkdir -p` for the state folder, and `omarchy-shell lock isLocked`.
 - [bun](https://bun.sh) and cargo only for development.
 
 ## How it was chosen

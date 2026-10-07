@@ -83,19 +83,6 @@ Item {
   // Asks the bar widget on the focused monitor to open its panel.
   signal panelRequested()
 
-  // The card shows on every monitor, so a fullscreen window on any monitor
-  // holds it. The workspace flag below is also set for maximized windows
-  // (Omarchy's "Full width"), so it only gates a probe of the real mode.
-  readonly property bool anyFullscreenFlag: Hyprland.monitors.values.some(function(m) {
-    return m.activeWorkspace !== null && m.activeWorkspace.hasFullscreen === true
-  })
-  property bool fullscreenHold: false
-  // When the hold was last probed. Workspace switches and window mode changes
-  // can leave the flag set while the answer changes, so a flagged workspace
-  // needs a fresh probe before the card shows or stays.
-  property real fullscreenProbedAt: 0
-  readonly property int fullscreenFreshMs: 1500
-
   // One word for the bar glyph and the panel status line.
   readonly property string status: {
     if (helperState === "missing" || helperState === "error") return helperState
@@ -270,54 +257,13 @@ Item {
     return !!(root.shell && typeof root.shell.isPluginOpen === "function" && root.shell.isPluginOpen(root.pluginId) === true)
   }
 
-  // Show the card while the alert stands, except over a fullscreen window.
-  // It shows after the window leaves fullscreen if posture is still bad.
+  // Show the card while the alert stands, fullscreen windows included.
   function syncCard() {
     if (!root.shell) return
-    var alerting = root.tracker.alert && !root.paused
-    // Re-probe whether or not the card is held: a held card must be let go
-    // when the fullscreen window leaves, even if a maximized one keeps the flag up.
-    if (alerting && root.anyFullscreenFlag && Date.now() - root.fullscreenProbedAt > root.fullscreenFreshMs) {
-      root.probeFullscreen()
-      return
-    }
-    if (!root.anyFullscreenFlag) root.fullscreenHold = false
-    var want = alerting && !root.fullscreenHold
+    var want = root.tracker.alert && !root.paused
     var open = root.cardOpen()
     if (want && !open && typeof root.shell.summon === "function") root.shell.summon(root.pluginId, "{}")
     else if (!want && open && typeof root.shell.hide === "function") root.shell.hide(root.pluginId)
-  }
-
-  onFullscreenHoldChanged: syncCard()
-
-  function probeFullscreen() {
-    if (!root.anyFullscreenFlag) {
-      root.fullscreenHold = false
-      return
-    }
-    if (!fullscreenProbe.running) fullscreenProbe.running = true
-  }
-
-  onAnyFullscreenFlagChanged: {
-    root.fullscreenProbedAt = 0
-    root.probeFullscreen()
-  }
-
-  // Hyprland fullscreen modes: 1 maximized, 2 fullscreen. Only a real
-  // fullscreen window on a visible workspace holds the card.
-  function applyFullscreenProbe(text) {
-    var clients
-    try {
-      clients = JSON.parse(text)
-    } catch (e) {
-      return
-    }
-    var visible = Hyprland.monitors.values.map(function(m) { return m.activeWorkspace ? m.activeWorkspace.id : null })
-    root.fullscreenHold = Array.isArray(clients) && clients.some(function(c) {
-      return (Number(c.fullscreen) & 2) !== 0 && c.workspace && visible.indexOf(c.workspace.id) !== -1
-    })
-    root.fullscreenProbedAt = Date.now()
-    root.syncCard()
   }
 
   function dismiss() {
@@ -379,7 +325,6 @@ Item {
       // The slate actually used: per-monitor mode may fall back to "*".
       slate: !root.slate ? "" : (Model.judgeMode(root.store, root.cfg.sideMode, root.monitorName) === "perMonitor" ? root.monitorName : "*"),
       alert: root.tracker.alert,
-      held: root.fullscreenHold,
       verdict: root.verdict.kind === "unknown" ? root.verdict.why : root.verdict.kind,
       kp: root.lastKp,
       reasons: root.tracker.reasons.map(function(r) { return Model.reasonText(r) })
@@ -390,7 +335,6 @@ Item {
 
   Component.onCompleted: {
     ensureDirProc.running = true
-    root.probeFullscreen()
   }
 
   Process {
@@ -455,13 +399,6 @@ Item {
       root.settingsApplied = true
       root.startHelper()
     }
-  }
-
-  Process {
-    id: fullscreenProbe
-    command: ["hyprctl", "-j", "clients"]
-    stdout: StdioCollector { id: fullscreenOut; waitForEnd: true }
-    onExited: function(code) { if (code === 0) root.applyFullscreenProbe(fullscreenOut.text) }
   }
 
   Timer {
